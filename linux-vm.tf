@@ -28,7 +28,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   source_image_id = var.custom_ubuntu_image_id
 
   boot_diagnostics {
-    storage_account_uri = var.enable_diagnostics ? one(azurerm_storage_account.storage.*.primary_blob_endpoint) : null
+    storage_account_uri = var.enable_boot_diagnostics ? one(azurerm_storage_account.storage.*.primary_blob_endpoint) : null
   }
 
   custom_data = base64encode(data.template_file.script.rendered)

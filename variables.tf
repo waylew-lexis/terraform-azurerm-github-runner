@@ -1,4 +1,10 @@
-# Module Inputs
+
+variable "name" {
+  description = "The name of the created resources."
+  type        = string
+
+}
+
 variable "resource_group_name" {
   description = "Resource group name"
   type        = string
@@ -9,17 +15,18 @@ variable "location" {
   type        = string
 }
 
-variable "names" {
-  description = "Names to be applied to resources"
-  type        = map(string)
-}
-
 variable "tags" {
   description = "Tags to be applied to resources"
   type        = map(string)
 }
 
-variable "enable_diagnostics" {
+variable "win_computer_name" {
+  description = "The windows computer name."
+  type        = string
+  default     = null
+}
+
+variable "enable_boot_diagnostics" {
   description = "Whether to enable boot diagnostics on the runner which enables the serial console"
   type        = bool
   default     = false
@@ -38,7 +45,6 @@ variable "admin_password" {
   default     = null
 }
 
-# Networking
 variable "subnet_id" {
   description = "Virtual network subnet ID"
   type        = string
@@ -89,7 +95,7 @@ variable "github_repo_name" {
 }
 
 variable "github_org_name" {
-  description = "GitHub Orginisation"
+  description = "The GitHub organization."
   type        = string
   default     = "LexisNexis-RBA"
 }
@@ -108,12 +114,6 @@ variable "runner_os" {
 variable "runner_labels" {
   description = "list of labels to associate to the runner"
   type        = list(string)
-  default     = ["azure"]
-}
-
-variable "runner_name" {
-  description = "Optional name of runner to overwrite module generated name"
-  type        = string
 }
 
 variable "runner_group" {
@@ -128,7 +128,7 @@ variable "runner_scope" {
   default     = "repo"
 
   validation {
-    condition     = (contains(["org", "repo"], lower(var.runner_scope)))
+    condition     = contains(["org", "repo"], lower(var.runner_scope))
     error_message = "The runner scope can only be \"org\" or \"repo\"."
   }
 }

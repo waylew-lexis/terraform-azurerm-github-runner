@@ -6,7 +6,7 @@ resource "random_string" "random" {
 
 
 resource "azurerm_storage_account" "storage" {
-  count = var.enable_diagnostics ? 1 : 0
+  count = var.enable_boot_diagnostics ? 1 : 0
 
   name                     = random_string.random.result
   resource_group_name      = var.resource_group_name

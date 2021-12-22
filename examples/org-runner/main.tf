@@ -1,7 +1,5 @@
 
 provider "azurerm" {
-  alias           = "image_gallery"
-  subscription_id = "ed5e2254-5d87-4255-b70e-1b5eba509f73"
   features {}
 }
 
@@ -28,6 +26,10 @@ module "runner" {
   runner_labels = ["azure", "dev"]
 }
 
+data "azurerm_subscription" "current" {
+
+}
+
 ## grant runner mi owner rights to sub
 resource "azurerm_role_assignment" "sub" {
   scope                = data.azurerm_subscription.current.id
@@ -41,9 +43,4 @@ variable "runner_token" {
   description = "github runner token"
   default     = "some-token"
   sensitive   = true
-}
-
-# Outputs
-output "outputs" {
-  value = module.runner
 }

@@ -7,8 +7,8 @@ resource "random_password" "password" {
 resource "azurerm_windows_virtual_machine" "vm" {
   count = var.runner_os == "windows" ? 1 : 0
 
-  name = local.name
-
+  name                = local.name
+  computer_name       = var.win_computer_name == null ? local.name : var.win_computer_name
   location            = var.location
   resource_group_name = var.resource_group_name
   tags                = var.tags
@@ -19,8 +19,6 @@ resource "azurerm_windows_virtual_machine" "vm" {
   admin_password = var.admin_password == null ? random_password.password.result : var.admin_password
 
   network_interface_ids = [azurerm_network_interface.dynamic.id]
-
-  #source_image_id = var.custom_ubuntu_image_id
 
   ## will force vm to be re-created
   custom_data = base64encode(timestamp())
