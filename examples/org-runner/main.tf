@@ -5,17 +5,9 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_shared_image" "shared" {
-  provider            = azurerm.image_gallery
-  name                = "ubuntu20"
-  gallery_name        = "ubuntu20"
-  resource_group_name = "app-imagegallery-prod-eastus2"
-}
-
 ## see link below for requesting a github app and runner group for org scoped runners
 ## https://reedelsevier.sharepoint.com/sites/OG-EnterpriseToolsOnlineCommunity/SitePages/Github-Process-%26-Automation.aspx
 module "runner" {
-  #source = "github.com/LexisNexis-RBA/terraform-azure-vm-github-runner.git"
   source = "../../"
 
   resource_group_name = module.resource_group.name
