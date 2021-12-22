@@ -1,0 +1,62 @@
+name: terraform validation
+
+on:
+  pull_request:
+    branches: [ main, dev ]
+    paths:
+      - "**.tf"
+  workflow_dispatch:
+
+jobs:
+  staticcheck:
+    name: staticcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+      - uses: reviewdog/action-staticcheck@v1
+      - uses: reviewdog/action-setup@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-check
+          fail_on_error: 'true'
+  terraform:
+    runs-on: ubuntu-latest
+    env:
+      TF_INPUT: false
+      TF_IN_AUTOMATION: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
+          terraform_wrapper: true
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: false
+      - name: Terraform Init
+        id: init
+        run: terraform init -backend=false
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+      - uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization \`${{ steps.init.outcome }}\`
+            #### Terraform Validation \`${{ steps.validate.outputs.stdout }}\`
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })

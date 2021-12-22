@@ -12,7 +12,9 @@ crash.log
 # .tfvars files are managed as part of configuration and so should be included in
 # version control.
 #
-# example.tfvars
+terraform.tfvars
+
+.terraform.lock.hcl
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
@@ -27,3 +29,30 @@ override.tf.json
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
+
+USAGE.md
+.env
+.vagrant*
+bin
+docker/docker
+.*.swp
+a.out
+*.orig
+build_src
+.flymake*
+.idea
+.DS_Store
+docs/_build
+docs/_static
+docs/_templates
+.gopath/
+.dotcloud
+*.test
+bundles/
+.hg/
+.git/
+vendor/pkg/
+pyenv
+Vagrantfile
+
+*.pem
