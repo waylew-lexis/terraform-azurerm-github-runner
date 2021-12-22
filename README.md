@@ -1,52 +1,6 @@
-# Azure - Virtual Machine GitHub Runner
-
-## Introduction
-This Terraform module will create a self-hosted GitHub runner hosted on an Azure VM.The module will configure a Managed Identity on the VM.
+# GitHub Runner Azure Virtual Machine
+This Terraform module will create a self-hosted GitHub runner hosted on an Azure VM. The module will configure a Managed Identity for the VM.
 See [examples](https://github.com/LexisNexis-RBA/terraform-azure-vm-github-runner/tree/main/examples) for recommended terraform implementation.
-
-## Notes
-- WARNING: InfoSec has not yet approved using custom runners for deploying infrastructure.
-- Module supports both org and repo scoped runners.
-- For security reasons, the ability to provision the runner with a personal access token has been removed.
-- Module supports both Windows and Linux runners.
-- Due to limitations with Azure vms, Windows runners cannot run container related actions.
-- For debugging runner issues, set the 'enable_diagnostics' to true. This will create then associate storage account to the vm which will allow you to access the vm's Serial console.
-- It is recommended to use an approved linux image for runners, they can be found in the image gallery (see examples).
-- A self-hosted runner is automatically removed from GitHub if it has not connected to GitHub Actions for more than 30 days.
-
-## Runner Scopes
-This module supports creating two types of runners repository and organization. Repository-level runners are dedicated to a single repository, and Organization-level runners can process jobs for multiple repositories in an organization.
-Below are the steps to provision:
-
-### Repository
-An example of how to configure a repo scoped runner can be found [here](https://github.com/LexisNexis-RBA/terraform-azure-vm-github-runner/tree/main/examples/repo-runner)
-1. To generate a new repo scoped runner token, go to repo Settings > Actions > Self-hosted runners section, clicking on “Add runner” button. Look for the token in the configuration steps:
-    ~~~
-    $ ./config.cmd --url https://github.com/LexisNexis-RBA/terraform-azure-vm-github-runner --token {RUNNER_TOKEN} Run it!
-    $ ./run.cmd
-   ~~~
-2. Copy the token and use as the value for the 'runner_token' variable.
-3. For the 'repo_name' variable, it will be the name of the LexisNexis-RBA repository that was used to generate the token.
-
-### Organization
-An example of how to configure a repo scoped runner can be found [here](https://github.com/LexisNexis-RBA/terraform-azure-vm-github-runner/tree/main/examples/org-runner)
-1. To create an organization scoped runner, first submit a request to [Enterprise Support](https://enterprise.githubsupport.com) or email enterprise.tools.support@lexisnexisrisk.com. The request should include the name of the runner group you want created and the names of the repositories that will have access to the runner.
-2. Once support provisions the new App and Runner group, they will send you the following:
-   1. Name of the runner group
-   2. App Name
-   3. App ID
-   4. App Private Key (pem file)
-   5. App Installation ID
-3. To Generate a runner token from the App, clone the following GitHub [repository](https://github.com/XenitAB/github-runner)
-4. in a bash shell, run the following:
-   ~~~
-   go run cmd/github-runner/main.go --organization lexisnexis-rba --app-id <id> --installation-id <id> --private-key-path <file>
-   ~~~
-5. Copy the token and use as the value for the 'runner_token' variable.
-6. Set 'runner_scope' variable to 'org'.
-7. Set the 'runner_group' variable to the name of the group from step 2.
-
-Be aware that tokens have a relatively short life-span, it is recommended to generate a new token each time you deploy a new runner.
 
 
 <!--- BEGIN_TF_DOCS --->
