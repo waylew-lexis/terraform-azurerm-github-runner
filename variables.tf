@@ -2,7 +2,6 @@
 variable "name" {
   description = "The name of the created resources."
   type        = string
-
 }
 
 variable "resource_group_name" {
@@ -18,6 +17,7 @@ variable "location" {
 variable "tags" {
   description = "Tags to be applied to resources"
   type        = map(string)
+  default     = {}
 }
 
 variable "win_computer_name" {
@@ -30,6 +30,12 @@ variable "enable_boot_diagnostics" {
   description = "Whether to enable boot diagnostics on the runner which enables the serial console"
   type        = bool
   default     = false
+}
+
+variable "diagnostics_storage_account_uri" {
+  description = "The Endpoint for the Azure Storage Account which should be used to store Boot Diagnostics, including Console Output and Screenshots from the Hypervisor."
+  type        = string
+  default     = null
 }
 
 variable "admin_username" {
@@ -63,6 +69,23 @@ variable "custom_ubuntu_image_id" {
   default     = null
 }
 
+variable "ubuntu_source_image_reference" {
+  description = "The linux Ubuntu publisher image to use."
+  type = object({
+    publisher = string
+    offer     = string
+    sku       = string
+    version   = string
+  })
+
+  default = {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts-gen2"
+    version   = "latest"
+  }
+}
+
 # VM Identity
 variable "identity_type" {
   description = "The Managed Service Identity Type of this Virtual Machine. Possible values are SystemAssigned (where Azure will generate a Service Principal for you), UserAssigned (where you can specify the Service Principal ID's)."
@@ -91,13 +114,12 @@ variable "github_runner_token" {
 variable "github_repo_name" {
   description = "Github repository where the runner should register"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "github_org_name" {
   description = "The GitHub organization."
   type        = string
-  default     = "LexisNexis-RBA"
 }
 
 variable "runner_os" {

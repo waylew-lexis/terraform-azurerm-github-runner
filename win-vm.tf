@@ -7,21 +7,25 @@ resource "random_password" "password" {
 resource "azurerm_windows_virtual_machine" "vm" {
   count = var.runner_os == "windows" ? 1 : 0
 
-  name                = local.name
-  computer_name       = var.win_computer_name == null ? local.name : var.win_computer_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  tags                = var.tags
-
-  size = var.virtual_machine_size
-
-  admin_username = var.admin_username
-  admin_password = var.admin_password == null ? random_password.password.result : var.admin_password
-
+  name                  = local.name
+  computer_name         = var.win_computer_name == null ? local.name : var.win_computer_name
+  location              = var.location
+  resource_group_name   = var.resource_group_name
+  tags                  = var.tags
+  size                  = var.virtual_machine_size
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password == null ? random_password.password.result : var.admin_password
   network_interface_ids = [azurerm_network_interface.dynamic.id]
 
   ## will force vm to be re-created
   custom_data = base64encode(timestamp())
+
+  dynamic "boot_diagnostics" {
+    for_each = var.enable_boot_diagnostics ? ["enabled"] : []
+    content {
+      storage_account_uri = var.diagnostics_storage_account_uri
+    }
+  }
 
   source_image_reference {
     publisher = "MicrosoftWindowsServer"

@@ -42,7 +42,6 @@ sh get-docker.sh
 systemctl is-active --quiet docker.service || systemctl start docker.service
 systemctl is-enabled --quiet docker.service || systemctl enable docker.service
 
-
 # Install latest docker-compose from releases
 echo "installing docker compose"
 URL="https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64"
@@ -50,20 +49,22 @@ curl -L $URL -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
 ## node and npm
+echo 'installing node'
 curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 apt-get update && apt-get install -y nodejs
 
 # azure cli
+echo 'installing azure cli'
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 # powershell
-# Download the Microsoft repository GPG keys
 echo 'installing powershell'
 wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
 dpkg -i packages-microsoft-prod.deb
 apt-get update && install -y powershell
 
 # terraform
+echo 'intstalling terraform'
 curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
 apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 apt-get update && apt install -y terraform
@@ -86,6 +87,7 @@ mkdir /_work
 
 cd /actions-runner
 
+echo 'installing github runner'
 GH_RUNNER_VERSION=$(curl --silent "https://api.github.com/repos/actions/runner/releases/latest" | grep tag_name | sed -E 's/.*"v([^"]+)".*/\1/')
 curl -L -O https://github.com/actions/runner/releases/download/v$GH_RUNNER_VERSION/actions-runner-linux-x64-$GH_RUNNER_VERSION.tar.gz
 tar -zxf actions-runner-linux-x64-$GH_RUNNER_VERSION.tar.gz
