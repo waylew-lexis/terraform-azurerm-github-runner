@@ -9,16 +9,16 @@ resource "random_string" "random" {
 }
 
 module "subscription" {
-  source          = "github.com/Azure-Terraform/terraform-azurerm-subscription-data.git?ref=v1.0.0"
+  source          = "git::https://github.com/Azure-Terraform/terraform-azurerm-subscription-data.git?ref=v1.0.0"
   subscription_id = data.azurerm_subscription.current.subscription_id
 }
 
 module "naming" {
-  source = "github.com/Azure-Terraform/example-naming-template.git?ref=v1.0.0"
+  source = "git::https://github.com/Azure-Terraform/example-naming-template.git?ref=v1.0.0"
 }
 
 module "metadata" {
-  source = "github.com/Azure-Terraform/terraform-azurerm-metadata.git?ref=v1.5.0"
+  source = "git::https://github.com/Azure-Terraform/terraform-azurerm-metadata.git?ref=v1.5.0"
 
   naming_rules = module.naming.yaml
 
@@ -35,7 +35,7 @@ module "metadata" {
 }
 
 module "resource_group" {
-  source = "github.com/Azure-Terraform/terraform-azurerm-resource-group.git?ref=v2.0.0"
+  source = "git::https://github.com/Azure-Terraform/terraform-azurerm-resource-group.git?ref=v2.0.0"
 
   location = module.metadata.location
   names    = module.metadata.names
@@ -43,7 +43,7 @@ module "resource_group" {
 }
 
 module "virtual_network" {
-  source = "github.com/Azure-Terraform/terraform-azurerm-virtual-network.git?ref=v5.0.0"
+  source = "git::https://github.com/Azure-Terraform/terraform-azurerm-virtual-network.git?ref=v5.0.0"
 
   naming_rules = module.naming.yaml
 
@@ -66,7 +66,7 @@ module "virtual_network" {
 }
 
 module "storage_account" {
-  source                    = "github.com/Azure-Terraform/terraform-azurerm-storage-account.git?ref=v0.12.1"
+  source                    = "git::https://github.com/Azure-Terraform/terraform-azurerm-storage-account.git?ref=v0.12.1"
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
   tags                      = module.metadata.tags
