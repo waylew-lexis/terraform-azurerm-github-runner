@@ -86,6 +86,23 @@ variable "ubuntu_source_image_reference" {
   }
 }
 
+variable "windows_source_image_reference" {
+  description = "The Windows publisher image to use."
+  type = object({
+    publisher = string
+    offer     = string
+    sku       = string
+    version   = string
+  })
+
+  default = {
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServer"
+    sku       = "2019-Datacenter"
+    version   = "latest"
+  }
+}
+
 # VM Identity
 variable "identity_type" {
   description = "The Managed Service Identity Type of this Virtual Machine. Possible values are SystemAssigned (where Azure will generate a Service Principal for you), UserAssigned (where you can specify the Service Principal ID's)."
@@ -99,20 +116,20 @@ variable "identity_type" {
 }
 
 variable "identity_ids" {
-  description = "Specifies a list of user managed identity ids to be assigned to the VM"
+  description = "Specifies a list of user assigned managed identity ids to be assigned to the VM."
   type        = list(string)
   default     = []
 }
 
 # GitHub
 variable "github_runner_token" {
-  description = "Github access token to use to create runner"
+  description = "The GitHub runner token."
   type        = string
   sensitive   = true
 }
 
 variable "github_repo_name" {
-  description = "Github repository where the runner should register"
+  description = "The GitHub repository."
   type        = string
   default     = null
 }
@@ -123,7 +140,7 @@ variable "github_org_name" {
 }
 
 variable "runner_os" {
-  description = "Whether to create the vm resource"
+  description = "The runner operating system. Allowed values are \"linux\" or \"windows\""
   type        = string
   default     = "linux"
 

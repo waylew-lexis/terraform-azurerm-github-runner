@@ -14,6 +14,7 @@ module "runner" {
   subnet_id = module.virtual_network.subnets["iaas-private"].id
 
   runner_scope     = "repo"
+  runner_os        = "linux"
   github_repo_name = var.gh_repo_name
   github_org_name  = var.gh_org_name
   ## gen repo runner token https://github.community/t/api-to-generate-runners-token/16963

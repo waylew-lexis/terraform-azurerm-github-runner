@@ -2,6 +2,28 @@
 This Terraform module will create a self-hosted GitHub runner hosted on an Azure VM. The module will configure a Managed Identity for the VM.
 See [examples](https://github.com/LexisNexis-RBA/terraform-azure-vm-github-runner/tree/main/examples) for recommended terraform implementation.
 
+## Features
+- Supports Linux or Windows os runner type.
+- Assigns a managed identity to allow access to Azure API.
+- Supports repository or organization scoped runners.
+- Both images install the following: Azure CLI, Terraform, and Git.
+
+
+## Runner Tokens
+In order for the runner to access GitHub resources, the module requires supplying a runner token.
+
+### Repository Scoped
+You can add self-hosted runners to a single repository. To add a self-hosted runner to a user repository, you must be the repository owner. For an organization repository, you must be an organization owner or have admin access to the repository.
+
+1. To generate a repository scoped runner token, from the repository go to Settings > Actions > Self-hosted runners section, clicking on “Add runner” button. Look for the token in the configuration steps:
+    ~~~
+        $ ./config.cmd --url https://github.com/LexisNexis-RBA/terraform-azure-vm-github-runner --token {RUNNER_TOKEN} Run it!
+        $ ./run.cmd
+    ~~~
+2. Copy the token value. This will be used for the 'github_runner_token' variable.
+
+### Organization Scoped
+You can add self-hosted runners at the organization level, where they can be used to process jobs for multiple repositories in an organization. To add a self-hosted runner to an organization, you must be an organization owner.
 
 <!--- BEGIN_TF_DOCS --->
 ## Requirements

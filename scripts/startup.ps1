@@ -4,11 +4,13 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocola
 
 choco feature enable -n allowGlobalConfirmation
 
-choco install git -y
+choco install git
 
-choco install choco install visualstudio2019buildtools -y
+choco install choco install visualstudio2019buildtools
 
-choco install azure-cli -y
+choco install azure-cli
+
+choco install terraform
 
 write-output "finished installing chocolatey";
 
