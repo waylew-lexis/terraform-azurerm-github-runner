@@ -18,9 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Render terraform docs inside the ReadME.md and push changes back to PR branch
+          token: ${{ secrets.ADMIN_TOKEN }}
+      - name: terraform docs
         uses: terraform-docs/gh-actions@v0.9.0
         with:
           working-dir: .
